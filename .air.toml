@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   # "." tells Go to build the package in the current directory
-  cmd = "go build -o ./tmp/main ."
+  cmd = "go build -o ./tmp/main ./cmd/api"
   # This matches the output path defined in the 'cmd' line above
   bin = "tmp/main"
   full_bin = ""
