@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/nadduli/go-modules/internal/config"
+	"github.com/nadduli/go-modules/internal/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -37,4 +38,8 @@ func Connect(cfg config.Config) (*gorm.DB, error) {
 		return nil, fmt.Errorf("database ping failed: %w", err)
 	}
 	return db, nil
+}
+
+func Migrate(db *gorm.DB) error {
+	return db.AutoMigrate(&models.User{})
 }

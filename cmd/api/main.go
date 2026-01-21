@@ -12,7 +12,9 @@ import (
 
 	"github.com/nadduli/go-modules/internal/config"
 	"github.com/nadduli/go-modules/internal/db"
+	"github.com/nadduli/go-modules/internal/repository"
 	"github.com/nadduli/go-modules/internal/server"
+	"github.com/nadduli/go-modules/internal/services"
 )
 
 func main() {
@@ -26,7 +28,15 @@ func main() {
 		log.Fatalf("DB error: %v", err)
 	}
 
-	router := server.NewRouter(database)
+	if err := db.Migrate(database); err != nil {
+		log.Fatalf("Migration error: %v", err)
+	}
+
+	userRepo := repository.NewUserRepo(database)
+	userService := services.NewService(userRepo, cfg.JWTSecret)
+	userHandler := server.NewUserHandler(userService)
+
+	router := server.NewRouter(userHandler)
 
 	srv := &http.Server{
 		Addr:        cfg.ServerPort,
