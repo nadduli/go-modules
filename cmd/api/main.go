@@ -29,8 +29,9 @@ func main() {
 	router := server.NewRouter(database)
 
 	srv := &http.Server{
-		Addr:    cfg.ServerPort,
-		Handler: router,
+		Addr:        cfg.ServerPort,
+		Handler:     router,
+		ReadTimeout: 5 * time.Second,
 	}
 
 	go func() {
